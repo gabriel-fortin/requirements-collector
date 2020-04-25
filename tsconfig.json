@@ -17,6 +17,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    /* baseUrl enables absolute imports. The IDE uses the settings in .eslintrc */
+    "baseUrl": "src",
     "jsx": "react"
   },
   "include": [
