@@ -1,6 +1,8 @@
 import FieldType from "./FieldType";
+import HasId from "./HasId";
 
-class Field {
+class Field implements HasId {
+    id: number;
     required: boolean;
     type: FieldType;
     title: string;
@@ -10,6 +12,7 @@ class Field {
     // TODO: make validation rules a class with some predefined possibilities
 
     constructor(
+        id: number,
         required: boolean,
         type: FieldType,
         title: string,
@@ -17,6 +20,7 @@ class Field {
         hintText: string = "",
         validationRules = "ANY",
     ) {
+        this.id = id;
         this.required = required;
         this.type = type;
         this.title = title;
