@@ -1,10 +1,12 @@
 import React from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import logo from './logo.svg';
+
+import { State } from 'Store';
+import { Page } from 'Widget';
+
 import './App.css';
-import State from './Store/State';
-import Page from 'Widget/Page';
+
 
 function App() {
   const identityOrDefault = (s: State | undefined, a: any) => s ?? new State();

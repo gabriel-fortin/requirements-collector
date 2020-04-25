@@ -1,5 +1,3 @@
-interface HasId {
+export interface HasId {
     id: number;
 }
-
-export default HasId;

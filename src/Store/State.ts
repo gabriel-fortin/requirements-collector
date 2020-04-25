@@ -1,6 +1,7 @@
-import Page from "../Model/Page";
+import { Page } from 'Model';
 
-class State {
+
+export class State {
     nextId: number = 1;
     pageContent: Page;
 
@@ -8,5 +9,3 @@ class State {
         this.pageContent = new Page();
     }
 }
-
-export default State;

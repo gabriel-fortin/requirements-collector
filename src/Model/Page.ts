@@ -1,7 +1,8 @@
-import FieldGroup from "./FieldGroup";
-import Field from "./Field";
+import { FieldGroup } from "./FieldGroup";
+import { Field } from "./Field";
 
-class Page {
+
+export class Page {
     content: (FieldGroup | Field)[];
 
     constructor(
@@ -10,5 +11,3 @@ class Page {
         this.content = content;
     }
 }
-
-export default Page;

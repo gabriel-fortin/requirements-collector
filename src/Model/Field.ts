@@ -1,7 +1,8 @@
-import FieldType from "./FieldType";
-import HasId from "./HasId";
+import { FieldType } from "./FieldType";
+import { HasId } from "./HasId";
 
-class Field implements HasId {
+
+export class Field implements HasId {
     id: number;
     required: boolean;
     type: FieldType;
@@ -29,5 +30,3 @@ class Field implements HasId {
         this.validationRules = validationRules;
     }
 }
-
-export default Field;

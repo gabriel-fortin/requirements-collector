@@ -1,7 +1,8 @@
-import Field from "./Field";
-import HasId from "./HasId";
+import { Field } from "./Field";
+import { HasId } from "./HasId";
 
-class FieldGroup implements HasId {
+
+export class FieldGroup implements HasId {
     id: number;
     title: string;
     fields: Field[];
@@ -16,5 +17,3 @@ class FieldGroup implements HasId {
         this.fields = fields;
     }
 }
-
-export default FieldGroup;

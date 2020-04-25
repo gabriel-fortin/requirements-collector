@@ -1,11 +1,13 @@
 import React from 'react';
-import Page from 'Model/Page';
+
+import { Page as PageModel } from 'Model';
+
 
 interface PageProps {
-    page: Page;
+    page: PageModel;
 }
 
-const PageWidget: React.FC<PageProps> = (props) => {
+export const Page: React.FC<PageProps> = (props) => {
     const page = props.page;
     
     return (
@@ -14,5 +16,3 @@ const PageWidget: React.FC<PageProps> = (props) => {
         </div>
     );
 };
-
-export default PageWidget;
