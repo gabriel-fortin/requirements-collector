@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 
 import { State } from 'Store';
 import { Page } from 'Widget';
+import { FieldType, Field } from 'Model';
 
 import './App.css';
 
@@ -11,6 +12,8 @@ import './App.css';
 function App() {
   const identityOrDefault = (s: State | undefined, a: any) => s ?? new State();
   const initialState = new State();
+  const ft: FieldType = { kind: "text", multiLine: true, maxCharacters: 55 };
+  initialState.pageContent.content.push(new Field(-14, true, ft, "name", "Please put your name:"));
 
   const reducer: (s: State | undefined, a: any) => State = identityOrDefault;
   const store = createStore(reducer, initialState);
