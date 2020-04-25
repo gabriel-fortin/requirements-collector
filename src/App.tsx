@@ -1,23 +1,22 @@
 import React from 'react';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import logo from './logo.svg';
 import './App.css';
+import State from './Store/State';
 
 function App() {
+  const identityOrDefault = (s: State | undefined, a: any) => s ?? new State();
+  
+  const reducer: (s: State | undefined, a: any) => State = identityOrDefault;
+  const store = createStore(reducer, new State());
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <Provider store={store}>
+
+        </Provider>
       </header>
     </div>
   );
