@@ -2,7 +2,11 @@ import Page from "../Model/Page";
 
 class State {
     nextId: number = 1;
-    pageContent: Page | null = null;
+    pageContent: Page;
+
+    constructor() {
+        this.pageContent = new Page();
+    }
 }
 
 export default State;

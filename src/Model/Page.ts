@@ -5,7 +5,7 @@ class Page {
     content: (FieldGroup | Field)[];
 
     constructor(
-        content: (FieldGroup | Field)[],
+        content: (FieldGroup | Field)[] = [],
     ) {
         this.content = content;
     }
