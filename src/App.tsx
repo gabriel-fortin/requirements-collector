@@ -12,8 +12,10 @@ import './App.css';
 function App() {
   const identityOrDefault = (s: State | undefined, a: any) => s ?? new State();
   const initialState = new State();
-  const ft: FieldType = { kind: "text", multiLine: true, maxCharacters: 55 };
-  initialState.pageContent.content.push(new Field(-14, true, ft, "name", "Please put your name:"));
+  const ft1: FieldType = { kind: "text", multiLine: true, maxCharacters: 55 };
+  const ft2: FieldType = { kind: "number", minValue: 0, maxValue: null };
+  initialState.pageContent.content.push(new Field(-14, true, ft1, "home", "describe your home"));
+  initialState.pageContent.content.push(new Field(-15, true, ft2, "age"));
 
   const reducer: (s: State | undefined, a: any) => State = identityOrDefault;
   const store = createStore(reducer, initialState);
