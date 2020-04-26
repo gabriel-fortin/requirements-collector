@@ -1,4 +1,5 @@
 import React from 'react';
+import { Box, Text } from '@chakra-ui/core';
 
 import { Page as PageModel, Field as FieldModel } from 'Model';
 
@@ -10,11 +11,20 @@ interface PageProps {
     page: PageModel;
 }
 
-export const Page: React.FC<PageProps> = ({ page }) => 
+export const Page: React.FC<PageProps> = ({ page }) =>
     <article className={"page"}>
         HELLO Page
-        {JSON.stringify(page)}
-        <table style={{marginLeft: "4em", marginTop: "1em"}}>
+        <br />
+        <Text as="div" fontSize={1} color="grey">
+            {JSON.stringify(page)}
+        </Text>
+        <table>
+            <tr>
+                <LocalHeader text="title" />
+                <LocalHeader text="hint text" />
+                <LocalHeader text="req / opt" />
+                <LocalHeader text="validation" />
+            </tr>
             {page.content.map(fieldOrGroup =>
                 <FieldDisplay
                     key={fieldOrGroup.id}
@@ -22,4 +32,14 @@ export const Page: React.FC<PageProps> = ({ page }) =>
                 />
             )}
         </table>
-    </article>
+    </article>;
+
+interface HProps { text: string; }
+const LocalHeader: React.FC<HProps> = ({ text }) => 
+    <th>
+        <Box textAlign="center" px={2} mb={2}>
+            <Text as="span" className="header-text" size="xs" px={1}>
+                {text}
+            </Text>
+        </Box>
+    </th>;
