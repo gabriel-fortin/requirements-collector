@@ -4,6 +4,7 @@ import { Box, Text } from '@chakra-ui/core';
 import { Page as PageModel, Field as FieldModel } from 'Model';
 
 import { FieldDisplay } from './FieldDisplay';
+import { FieldEditor } from './FieldEditor';
 import './page.css';
 
 
@@ -19,19 +20,22 @@ export const Page: React.FC<PageProps> = ({ page }) =>
             {JSON.stringify(page)}
         </Text>
         <table>
-            <tr>
-                <LocalHeader text="title" />
-                <LocalHeader text="hint text" />
-                <LocalHeader text="req / opt" />
-                <LocalHeader text="validation" />
-            </tr>
-            {page.content.map(fieldOrGroup =>
-                <FieldDisplay
-                    key={fieldOrGroup.id}
-                    field={fieldOrGroup as FieldModel}
-                />
-            )}
+            <tbody>
+                <tr>
+                    <LocalHeader text="title" />
+                    <LocalHeader text="hint text" />
+                    <LocalHeader text="req / opt" />
+                    <LocalHeader text="validation" />
+                </tr>
+                {page.content.map(fieldOrGroup =>
+                    <FieldDisplay
+                        key={fieldOrGroup.id}
+                        field={fieldOrGroup as FieldModel}
+                    />
+                )}
+            </tbody>
         </table>
+        <FieldEditor field={null} />
     </article>;
 
 interface HProps { text: string; }
