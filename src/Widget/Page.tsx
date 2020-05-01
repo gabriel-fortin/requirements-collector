@@ -35,7 +35,7 @@ export const Page: React.FC<PageProps> = ({ page }) =>
                 )}
             </tbody>
         </table>
-        <FieldEditor field={new Field(true, { kind: "text", multiLine: true, maxCharacters: 55 } as FieldTypeModel, "abc")} />
+        <FieldEditor field={new Field(true, { kind: "text", multiLine: false, maxCharacters: 55 } as FieldTypeModel, "Favourite Toy")} />
     </article>;
 
 interface HProps { text: string; }
