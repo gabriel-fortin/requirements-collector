@@ -4,14 +4,27 @@ import { Box, Collapse, Divider, Flex, Input, Text } from '@chakra-ui/core';
 import { Field } from 'Model';
 
 
+// TODO: handle saving data: add on change callback
+// TODO: handle 'required'
+// TODO: handle 'type' correctly
+// TODO: handle 'validationRules'
+// TODO: handle null values for 'hintText': on/off switch maybe?
+// TODO: move styles to CSS file
+// TODO: make 'onSave' non-nullable once caller implements it
+
+
 interface FEProps {
     field: Field;
+    onSave?: (newField: Field) => void;
 }
-// TODO: handle saving data: add on change callback
-export const FieldEditor: React.FC<FEProps> = ({ field: fieldProp }) => {
-    const [isCollpsed, setCollapsed] = useState(false);
+export const FieldEditor: React.FC<FEProps> = ({ field: fieldProp, onSave }) => {
+    const [isCollpsed, setCollapsed] = useState(true);
     const toggle = () => setCollapsed(!isCollpsed);
     const [field, setField] = useState(fieldProp);
+
+    if (onSave === null) {
+        console.warn(`in FieldEditor: the 'onSave' callback is not set`);
+    }
 
     return (
         <Box
@@ -20,54 +33,78 @@ export const FieldEditor: React.FC<FEProps> = ({ field: fieldProp }) => {
             paddingRight={2}
             paddingTop={1}
             paddingBottom={2}
+            margin={1}
             backgroundColor="rgba(155, 155, 155, 0.05)"
             border="solid 1px rgba(155, 155, 155, 0.15)"
         >
-            <Flex onClick={toggle}>
-                <Text as="span">
-                    {field?.title}
-                    &nbsp;
-                </Text>
-                <Collapse isOpen={!isCollpsed}
-                    marginLeft={4}
-                >
-                    <Text
-                        as="span"
-                        fontSize={2}
-                        color="rgba(150, 150, 150, 0.3)"
-                    >
-                        other props
-                    </Text>
-                </Collapse>
-            </Flex>
-            <Collapse isOpen={isCollpsed}>
-                <Divider
-                    marginTop={1}
-                    marginBottom={2}
-                    color="rgba(155, 155, 155, 0.4)"
-                />
-                <TextDataEditor title="field title" value={field.title}
-                    onChange={(newValue: string) => {
-                        setField({...field, title: newValue});
-                    }}
-                />
-                <TextDataEditor title="field type" value={JSON.stringify(field.type)}
-                    onChange={(newValue: string) => {
-                        setField({...field, type: JSON.parse(newValue)});
-                    }}
-                />
-                <TextDataEditor title="hint text" value={field.hintText ?? ""}
-                    onChange={(newValue: string) => {
-                        setField({...field, hintText: newValue});
-                    }}
-                />
-                {/* TODO: handle 'required' */}
-                {/* TODO: handle 'type' correctly */}
-                {/* TODO: handle 'validationRules' */}
-            </Collapse>
+            <Header
+                field={field}
+                showOnlyTitle={isCollpsed}
+                onHeaderClick={toggle}
+            />
+            <Body
+                field={field}
+                show={!isCollpsed}
+                onNewFieldValue={setField}
+            />
         </Box>
     );
 };
+
+
+interface HeaderProps {
+    field: Field;
+    showOnlyTitle: boolean;
+    onHeaderClick: () => void;
+}
+const Header: React.FC<HeaderProps> = ({ field, showOnlyTitle, onHeaderClick }) => 
+    <Flex onClick={onHeaderClick}>
+        <Text as="span">
+            {field?.title}
+            &nbsp; {/* forces minimum height */}
+        </Text>
+        <Collapse isOpen={showOnlyTitle}
+            marginLeft={4}
+        >
+            <Text
+                as="span"
+                fontSize={2}
+                color="rgba(150, 150, 150, 0.3)"
+            >
+                other props will show here
+            </Text>
+        </Collapse>
+    </Flex>;
+
+
+interface BodyProps {
+    field: Field;
+    show: boolean;
+    onNewFieldValue: (newField: Field) => void;
+}
+const Body: React.FC<BodyProps> = ({ field, show, onNewFieldValue }) =>
+    <Collapse isOpen={show}>
+        <Divider
+            marginTop={1}
+            marginBottom={2}
+            color="rgba(155, 155, 155, 0.4)"
+        />
+        <TextDataEditor title="field title" value={field.title}
+            onChange={(newValue: string) => {
+                onNewFieldValue({...field, title: newValue});
+            }}
+        />
+        <TextDataEditor title="field type" value={JSON.stringify(field.type)}
+            onChange={(newValue: string) => {
+                onNewFieldValue({...field, type: JSON.parse(newValue)});
+            }}
+        />
+        <TextDataEditor title="hint text" value={field.hintText ?? ""}
+            onChange={(newValue: string) => {
+                onNewFieldValue({...field, hintText: newValue});
+            }}
+        />
+    </Collapse>;
 
 
 interface TDEProps {
