@@ -14,8 +14,8 @@ function App() {
   const initialState = new State();
   const ft1: FieldType = { kind: "text", multiLine: true, maxCharacters: 55 };
   const ft2: FieldType = { kind: "number", minValue: 0, maxValue: null };
-  initialState.pageContent.content.push(new Field(-14, true, ft1, "home", "describe your home"));
-  initialState.pageContent.content.push(new Field(-15, false, ft2, "age"));
+  initialState.pageContent.content.push({id: -14, ...new Field(true, ft1, "home", "describe your home")});
+  initialState.pageContent.content.push({id: -15, ...new Field(false, ft2, "age")});
 
   const reducer: (s: State | undefined, a: any) => State = identityOrDefault;
   const store = createStore(reducer, initialState);

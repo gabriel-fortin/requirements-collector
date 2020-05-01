@@ -1,9 +1,7 @@
 import { FieldType } from "./FieldType";
-import { HasId } from "./HasId";
 
 
-export class Field implements HasId {
-    id: number;
+export class Field {
     required: boolean;
     type: FieldType;
     title: string;
@@ -13,14 +11,12 @@ export class Field implements HasId {
     // TODO: validation should probably be part of type because allowed validations depend on FieldType
 
     constructor(
-        id: number,
         required: boolean,
         type: FieldType,
         title: string,
         hintText: string | null = null,
         validationRules = "ANY",
     ) {
-        this.id = id;
         this.required = required;
         this.type = type;
         this.title = title;

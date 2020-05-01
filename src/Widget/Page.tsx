@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Text } from '@chakra-ui/core';
 
-import { Page as PageModel, Field as FieldModel } from 'Model';
+import { Page as PageModel, Field as FieldModel, Field, FieldType as FieldTypeModel } from 'Model';
 
 import { FieldDisplay } from './FieldDisplay';
 import { FieldEditor } from './FieldEditor';
@@ -35,7 +35,7 @@ export const Page: React.FC<PageProps> = ({ page }) =>
                 )}
             </tbody>
         </table>
-        <FieldEditor field={null} />
+        <FieldEditor field={new Field(true, { kind: "text", multiLine: true, maxCharacters: 55 } as FieldTypeModel, "abc")} />
     </article>;
 
 interface HProps { text: string; }
