@@ -14,11 +14,13 @@ import './page.css';
 interface PageProps {
     page: PageModel;
 }
-
 export const Page: React.FC<PageProps> = ({ page }) =>
     <article className={"page"}>
         <Text as="h1" textAlign="center" marginTop={0}>
             Circus Service
         </Text>
-        <FieldEditor field={new FieldModel(true, { kind: "text", multiLine: false, maxCharacters: 55 } as FieldTypeModel, "Favourite Toy")} />
+        {page.content
+            .map(x => x as FieldModel)
+            .map(field => <FieldEditor field={field} />)
+        }
     </article>;
