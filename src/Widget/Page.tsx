@@ -4,7 +4,6 @@ import { Text } from '@chakra-ui/core';
 import {
     Page as PageModel,
     Field as FieldModel,
-    FieldType as FieldTypeModel
 } from 'Model';
 
 import { FieldEditor } from './FieldEditor';

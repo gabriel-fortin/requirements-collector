@@ -61,7 +61,7 @@ const Header: React.FC<HeaderProps> = ({ field, showOnlyTitle, onHeaderClick }) 
     <Flex onClick={onHeaderClick}>
         <Text as="span">
             {field?.title}
-            &nbsp; {/* forces minimum height */}
+            &nbsp; {/* prevents collapsing */}
         </Text>
         <Collapse isOpen={showOnlyTitle}
             marginLeft={4}
@@ -107,12 +107,12 @@ const Body: React.FC<BodyProps> = ({ field, show, onNewFieldValue }) =>
     </Collapse>;
 
 
-interface TDEProps {
+interface TextDataEditorProps {
     title: string;
     value: string;
     onChange: (newValue: string) => void;
 }
-const TextDataEditor: React.FC<TDEProps> = ({ title, value, onChange })  => {
+const TextDataEditor: React.FC<TextDataEditorProps> = ({ title, value, onChange })  => {
     const titleVerticalShift = 15;
     const borderRadius = 4;
     return (
