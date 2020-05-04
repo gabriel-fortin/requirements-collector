@@ -1,13 +1,13 @@
 import { FieldGroup } from "./FieldGroup";
 import { Field } from "./Field";
-import { HasId } from './HasId';
+import { TreeNode } from 'Store';
 
 
 export class Page {
-    content: (HasId & (FieldGroup | Field))[];
+    content: (TreeNode & (FieldGroup | Field))[];
 
     constructor(
-        content: (HasId & (FieldGroup | Field))[] = [],
+        content: (TreeNode & (FieldGroup | Field))[] = [],
     ) {
         this.content = content;
     }
