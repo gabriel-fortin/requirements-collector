@@ -52,6 +52,8 @@ export abstract class State {
     // TODO: remove after initial dev phase when more robust access is implemented
     abstract lastPageUsed(): Page;
 
+    abstract getPage(pageId: IdType): Page;
+
     // TODO: remove when test data not needed anymore
     abstract addSomeTestData(): State;
 
@@ -137,6 +139,14 @@ class StateImpl extends State {
         }
 
         return lastPage;
+    }
+
+    getPage(pageId: IdType): Page {
+        const maybePage = this.userData.page.get(pageId);
+        if (maybePage === undefined) {
+            throw new Error(`Page with id '${JSON.stringify(pageId)}' was not found`);
+        }
+        return maybePage;
     }
     
     // TODO: remove when test data not needed anymore

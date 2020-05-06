@@ -14,7 +14,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <StateContext.Provider value={state}>
-          <Page page={state.lastPageUsed()} />
+          <Page />
         </StateContext.Provider>
       </header>
     </div>
