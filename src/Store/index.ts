@@ -1,5 +1,7 @@
 import StateContext from './Context';
+import { State } from './State';
 
-export * from './State';
 export type TreeNode = import('./TreeNode').TreeNode;
-export { StateContext };
+export type Id = import('./TreeNode').Id;
+
+export { State, StateContext };

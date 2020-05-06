@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Text } from '@chakra-ui/core';
 
-import { StateContext } from 'Store';
+import { StateContext, Id } from 'Store';
 import {
     Page as PageModel,
     Field as FieldModel,
@@ -27,7 +27,7 @@ export const PurePage: React.FC<PurePageProps> = ({ page }) =>
 
 
 interface ConnectedPageProps {
-    pageId: string;
+    pageId: Id;
 }
 export const ConnectedPage: React.FC<ConnectedPageProps> = ({ pageId }) => {
     const stateContext = useContext(StateContext);

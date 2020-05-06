@@ -1,10 +1,9 @@
 import { Page, Field } from 'Model';
-import { TreeNode } from 'Store';
+import { Id, TreeNode } from 'Store';
 
 
 // TODO: setting state should be separate from state itself (SRP)
 
-type IdType = string;
 type FT = import('Model').FieldType;  // TODO: remove 
 
 export abstract class State {
@@ -13,10 +12,10 @@ export abstract class State {
     readonly userData: {
         
         /** All pages the user has */
-        page: ReadonlyMap<IdType, Readonly<TreeNode & Page>>,
+        page: ReadonlyMap<Id, Readonly<TreeNode & Page>>,
         
         /** All fields the user has */
-        field: ReadonlyMap<IdType, Readonly<TreeNode & Field>>,
+        field: ReadonlyMap<Id, Readonly<TreeNode & Field>>,
     };
 
     protected constructor() {
@@ -45,14 +44,14 @@ export abstract class State {
     
     abstract setStateSetter(stateSetter: (s: State) => void): void;
 
-    abstract addField(parentId: IdType): void;
+    abstract addField(parentId: Id): void;
 
     abstract updateField(field: TreeNode & Field): void;
 
     // TODO: remove after initial dev phase when more robust access is implemented
     abstract lastPageUsed(): Page;
 
-    abstract getPage(pageId: IdType): Page;
+    abstract getPage(pageId: Id): Page;
 
     // TODO: remove when test data not needed anymore
     abstract addSomeTestData(): State;
@@ -97,7 +96,7 @@ class StateImpl extends State {
         this.externalStateSetter = stateSetter;
     }
     
-    getNextId(): string {
+    getNextId(): Id {
         return String(this.nextId++);
     }
 
@@ -105,7 +104,7 @@ class StateImpl extends State {
         this.externalStateSetter = stateSetter;
     }
     
-    addField(parentId: IdType): void {
+    addField(parentId: Id): void {
         const newId = this.getNextId();
         // TODO: should not need to set any values beside IDs; it means constructors should need less params
         const ft: FT = { kind: "text", multiLine: true, maxCharacters: 55 };
@@ -141,7 +140,7 @@ class StateImpl extends State {
         return lastPage;
     }
 
-    getPage(pageId: IdType): Page {
+    getPage(pageId: Id): Page {
         const maybePage = this.userData.page.get(pageId);
         if (maybePage === undefined) {
             throw new Error(`Page with id '${JSON.stringify(pageId)}' was not found`);
@@ -168,7 +167,7 @@ class StateImpl extends State {
         const pageId = state.getNextId();
         state.lastPageId = pageId;
 
-        const modifiableState = state.userData.page as unknown as Map<IdType, TreeNode & Page>;
+        const modifiableState = state.userData.page as unknown as Map<Id, TreeNode & Page>;
         modifiableState.set(pageId, {
             ...new Page([field1, field2]),
             id: pageId,

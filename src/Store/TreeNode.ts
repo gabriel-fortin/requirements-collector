@@ -1,4 +1,6 @@
+export type Id = string;
+
 export interface TreeNode {
-    id: string;
-    parentId: string | null;
+    id: Id;
+    parentId: Id | null;
 }
