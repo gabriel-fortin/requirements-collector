@@ -1,27 +1,21 @@
-import React from 'react';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
+import React, { useState } from 'react';
 
-import { State } from 'Store';
+import { State, StateContext } from 'Store';
 import { Page } from 'Widget';
-import { FieldType, Field } from 'Model';
 
 import './App.css';
 
 
 function App() {
-  const identityOrDefault = (s: State | undefined, a: any) => s ?? new State();
-  const initialState = State.createWithSomeTestData();
-
-  const reducer: (s: State | undefined, a: any) => State = identityOrDefault;
-  const store = createStore(reducer, initialState);
+  const [state, setState] = useState<State>(State.createWithoutStateSetter().addSomeTestData());
+  state.setStateSetter(setState);
 
   return (
     <div className="App">
       <header className="App-header">
-        <Provider store={store}>
-          <Page page={store.getState().lastPageUsed()} />
-        </Provider>
+        <StateContext.Provider value={state}>
+          <Page page={state.lastPageUsed()} />
+        </StateContext.Provider>
       </header>
     </div>
   );

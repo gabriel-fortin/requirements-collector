@@ -1,55 +1,146 @@
 import { Page, Field } from 'Model';
 import { TreeNode } from 'Store';
-import { stat } from 'fs';
 
+
+// TODO: setting state should be separate from state itself (SRP)
 
 type IdType = string;
+type FT = import('Model').FieldType;  // TODO: remove 
 
-export class State {
+export abstract class State {
     
-    /** Data entered by the user */
-    userData: {
+    /** Data entered or modified by the user */
+    readonly userData: {
         
         /** All pages the user has */
-        page: Map<IdType, TreeNode & Page>,
+        page: ReadonlyMap<IdType, Readonly<TreeNode & Page>>,
         
-        /** All fields the user have */
-        field: Map<IdType, TreeNode & Field>,
+        /** All fields the user has */
+        field: ReadonlyMap<IdType, Readonly<TreeNode & Field>>,
     };
-    
-    private nextId: number = 1;
 
-    // TODO: remove when 'lastPageUsed' method not needed anymore
-    private lastPageId: string | null = null;
-    
-    constructor() {
+    protected constructor() {
         this.userData = {
             page: new Map(),
             field: new Map(),
         };
     }
     
-    private getNextId(): string {
+    static create(stateSetter: (s: State) => void): State {
+        return new StateImpl(stateSetter);
+    }
+
+    static createWithoutStateSetter(): State {
+        const throwingStateSetter = (s: State) => {
+            throw new Error(`State setter was not set`);
+        };
+
+        return new StateImpl(throwingStateSetter);
+    }
+
+    static createWithoutStateSetterWithSomeTestData(): State {
+        return (State.createWithoutStateSetter() as StateImpl)
+            .addSomeTestData();
+    }
+    
+    abstract setStateSetter(stateSetter: (s: State) => void): void;
+
+    abstract addField(parentId: IdType): void;
+
+    abstract updateField(field: TreeNode & Field): void;
+
+    // TODO: remove after initial dev phase when more robust access is implemented
+    abstract lastPageUsed(): Page;
+
+    // TODO: remove when test data not needed anymore
+    abstract addSomeTestData(): State;
+
+    private tests_for_immutability() {
+    //     const ft: FT = { kind: "text", multiLine: true, maxCharacters: 55 };
+    //     const newField = {
+    //         ...new Field(false, ft, "<tite>", null, "ANY"),
+    //         id: "kkk",
+    //         parentId: "ppp",
+    //     };
+
+    //     // setter should fail
+    //     this.userData.field.set("Kkk", newField);
+
+    //     // assigning new value should fail
+    //     this.userData = {
+    //         page: new Map(),
+    //         field: new Map(),
+    //     };
+    //     const p = this.userData.page.get("1");
+    //     if (p === undefined) return;
+
+    //     // assigning new value should fail
+    //     p.content = [];
+    }
+}
+
+
+class StateImpl extends State {
+    
+    private nextId: number = 1;
+
+    // TODO: remove when 'lastPageUsed' method not needed anymore
+    private lastPageId: string | null = null;
+
+    private externalStateSetter: (s: State) => void;
+    
+    constructor(stateSetter: (s: State) => void) {
+        super();
+        
+        this.externalStateSetter = stateSetter;
+    }
+    
+    getNextId(): string {
         return String(this.nextId++);
     }
 
-    // TODO: remove after initial dev phase when more robust access is implemented
+    setStateSetter(stateSetter: (s: State) => void) {
+        this.externalStateSetter = stateSetter;
+    }
+    
+    addField(parentId: IdType): void {
+        const newId = this.getNextId();
+        // TODO: should not need to set any values beside IDs; it means constructors should need less params
+        const ft: FT = { kind: "text", multiLine: true, maxCharacters: 55 };
+        const newField = {
+            ...new Field(false, ft, "<tite>", null, "ANY"),
+            id: newId,
+            parentId,
+        };
+        
+        this.externalStateSetter({
+            ...this,
+            userData: {
+                ...this.userData,
+                field: new Map(this.userData.field).set(newId, newField),
+            },
+        });
+    }
+
+    updateField(field: TreeNode & Field): void {
+        // TODO
+    }
+    
     lastPageUsed(): Page {
         if (this.lastPageId === null) {
             throw new Error(`There is no last page`);
         }
 
-        if (!this.userData.page.has(this.lastPageId as string)) {
+        const lastPage = this.userData.page.get(this.lastPageId)
+        if (lastPage === undefined) {
             throw new Error(`Last page was not found`);
         }
 
-        return this.userData.page.get(this.lastPageId as string) as Page;
+        return lastPage;
     }
-
+    
     // TODO: remove when test data not needed anymore
-    static createWithSomeTestData(): State {
-        type FT = import('Model').FieldType;
-
+    addSomeTestData(): State {
         const ft1: FT = { kind: "text", multiLine: true, maxCharacters: 55 };
         const ft2: FT = { kind: "number", minValue: 0, maxValue: null };
         const field1 = {
@@ -63,11 +154,12 @@ export class State {
             ...new Field(false, ft2, "age")
         };
         
-        const state = new State();
+        const state = this;
         const pageId = state.getNextId();
         state.lastPageId = pageId;
 
-        state.userData.page.set(pageId, {
+        const modifiableState = state.userData.page as unknown as Map<IdType, TreeNode & Page>;
+        modifiableState.set(pageId, {
             ...new Page([field1, field2]),
             id: pageId,
             parentId: null,
@@ -75,4 +167,5 @@ export class State {
 
         return state;
     }
+
 }
